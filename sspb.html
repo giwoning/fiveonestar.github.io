@@ -133,8 +133,8 @@
             import { firstHello } from "/js/firstHello.js";
             window.thisDialog.setCurrentScript('firstHello');
             window.thisDialog.initScript(-1, '주니어 발록 사냥꾼');
+            firstHello(window.thisDialog);
             setTimeout(() =>  {
-                firstHello(window.thisDialog);
                 window.thisDialog.readScript('firstHello');
             }, 0);
         </script>
@@ -181,9 +181,9 @@
         import { todayBundle } from "/js/todayBundle.js";
         window.thisDialog.setCurrentScript('todayBundle');
         window.thisDialog.initScript(-1, '핑크빈탈 쓴 강원기');
+        todayBundle(window.thisDialog);
         setTimeout(() =>  {
-            todayBundle(window.thisDialog);
+            window.buyBtn.addEventListener('click', () => window.thisDialog.readScript('todayBundle'));
         }, 0);
-        window.buyBtn.addEventListener('click', () => window.thisDialog.readScript('todayBundle'));
     </script>
 </body>
