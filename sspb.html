@@ -113,7 +113,7 @@
         .letter[data-stage="1"][data-seq="3"][data-letter="A"] { top: 172px; left:183px; }
         .letter[data-stage="1"][data-seq="4"][data-letter="R"] { top: 172px; left:215px; }
     </style>
-    <script type="module" src="./js/firstHello.js"></script>
+    <script type="module" src="js/firstHello.js"></script>
 </head>
 
 <body>
@@ -126,12 +126,12 @@
         <div class="letter" data-stage="1" data-seq="3" data-letter="A" data-active="false"></div>
         <div class="letter" data-stage="1" data-seq="4" data-letter="R" data-active="false"></div>
         <script type="module">
-            import { Dialog } from './js/dialogOverlay.js';
+            import { Dialog } from 'js/dialogOverlay.js';
             const thisDialog = new Dialog();
             window.thisDialog = thisDialog;
         </script>
         <script type="module">
-            import { firstHello } from "./js/firstHello.js";
+            import { firstHello } from "js/firstHello.js";
             window.thisDialog.setCurrentScript('firstHello');
             window.thisDialog.initScript(-1, '주니어 발록 사냥꾼');
             setTimeout(() =>  {
@@ -179,7 +179,7 @@
     </script>
 
     <script type="module">
-        import { todayBundle } from "./js/todayBundle.js";
+        import { todayBundle } from "js/todayBundle.js";
         window.thisDialog.setCurrentScript('todayBundle');
         window.thisDialog.initScript(-1, '핑크빈탈 쓴 강원기');
         setTimeout(() =>  {
