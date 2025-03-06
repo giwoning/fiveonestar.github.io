@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우주스타 핑크빈 시뮬레이터</title>
+    <style>
+        .ui-container {
+            position: relative;
+            width: 708px;
+            height: 630px;
+            background: url('./resource/main_window.png') no-repeat center;
+            background-size: cover;
+        }
+
+        .message-btn > .end-chat:hover::after {
+            content: "";
+            position: absolute;
+            width: 91px;
+            height: 16px;
+            background-size: cover;
+            opacity: 0;
+            pointer-events: none;
+            background-image: var(--end-chat-pressed-background, url('./resource/dialog_endchat_mouseOver.png'));
+            opacity: 1;
+        }
+
+        .message-btn > .next:hover::after {
+            content: "";
+            position: absolute;
+            width: 40px;
+            height: 16px;
+            background-size: cover;
+            opacity: 0;
+            pointer-events: none;
+            background-image: var(--next-btn-pressed-background, url('./resource/dialog_next-btn_mouseOver.png'));
+            opacity: 1;
+        }
+
+        .today-bundle {
+            position: absolute;
+            width: 171px;
+            height: 89px;
+            background-image: url('./resource/today_bundle.png');
+            display: inline-block;
+            cursor: pointer;
+            top: 57px;
+            left: 21px;
+        }
+
+        .today-bundle-buy {
+            position: absolute;
+            width: 60px;
+            height: 22px;
+            background-image: url('./resource/buy_normal.png');
+            display: inline-block;
+            cursor: pointer;
+            top: 126px;
+            left: 117px;
+        }
+
+        .today-bundle-buy:hover::after {
+            content: "";
+            position: absolute;
+            width: 60px;
+            height: 22px;
+            background-size: cover;
+            opacity: 0;
+            pointer-events: none;
+            background-image: var(--today-bundle-pressed-background, url('./resource/buy_mouseOver.png'));
+            opacity: 1;
+        }
+
+        .letter {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            display: inline-block;
+            cursor: pointer;
+            background-image: var(--letter-background)
+        }
+
+        .letter::after {
+            content: "";
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            width: 44px;
+            height: 44px;
+            background-size: cover;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .letter:hover::after {
+            background-image: var(--letter-hover-background);
+            opacity: 1;
+        }
+
+        .letter.active {
+            background-image: var(--letter-active-background);
+        }
+
+        .letter.active:hover::after {
+            background-image: var(--letter-active-hover-background);
+        }
+
+        .letter.active::after {
+            background-image: var(--letter-active-pressed-background);
+        }
+
+        .letter[data-stage="1"][data-seq="1"][data-letter="S"] { top: 172px; left:119px; }
+        .letter[data-stage="1"][data-seq="2"][data-letter="T"] { top: 172px; left:151px; }
+        .letter[data-stage="1"][data-seq="3"][data-letter="A"] { top: 172px; left:183px; }
+        .letter[data-stage="1"][data-seq="4"][data-letter="R"] { top: 172px; left:215px; }
+    </style>
+    <script type="module" src="./js/firstHello.js"></script>
+</head>
+
+<body>
+    <div class="ui-container">
+        <div class="today-bundle"></div>
+        <div class="today-bundle-buy"></div>
+        <!-- 알파벳 아이콘들 -->
+        <div class="letter" data-stage="1" data-seq="1" data-letter="S" data-active="false"></div>
+        <div class="letter" data-stage="1" data-seq="2" data-letter="T" data-active="false"></div>
+        <div class="letter" data-stage="1" data-seq="3" data-letter="A" data-active="false"></div>
+        <div class="letter" data-stage="1" data-seq="4" data-letter="R" data-active="false"></div>
+        <script type="module">
+            import { Dialog } from './js/dialogOverlay.js';
+            const thisDialog = new Dialog();
+            window.thisDialog = thisDialog;
+        </script>
+        <script type="module">
+            import { firstHello } from "./js/firstHello.js";
+            window.thisDialog.setCurrentScript('firstHello');
+            window.thisDialog.initScript(-1, '주니어 발록 사냥꾼');
+            setTimeout(() =>  {
+                firstHello(window.thisDialog);
+                window.thisDialog.readScript('firstHello');
+            }, 0);
+        </script>
+    </div>
+
+    <script>
+        buyBtn = document.querySelector(".today-bundle-buy");
+        let isPressed = false;
+        buyBtn.addEventListener('mousedown', function() {
+            isPressed = true;
+            this.classList.add('pressed');
+            this.style.setProperty('--today-bundle-pressed-background', "url('./resource/buy_pressed.png')");
+        });
+        buyBtn.addEventListener('mouseup', function() {
+            if (isPressed) {
+                this.classList.remove('pressed');
+                this.style.setProperty('--today-bundle-pressed-background', null);
+                isPressed = false;
+            }
+        });
+        buyBtn.addEventListener('mouseleave', function() {
+            if (isPressed) {
+                this.classList.remove('pressed');
+                this.style.setProperty('--today-bundle-pressed-background', null);
+                isPressed = false;
+            }
+        });
+        window.buyBtn = buyBtn;
+        document.querySelectorAll(".letter").forEach(letter => {
+            const letterValue = letter.getAttribute('data-letter');
+            letter.style.setProperty('--letter-background', `url('./resource/collection_area/${letterValue}_disabled.png')`);
+            letter.style.setProperty('--letter-active-background', `url('./resource/collection_area/${letterValue}_normal.png')`);
+            letter.style.setProperty('--letter-hover-background', `url('./resource/collection_area/mouseOver.png')`);
+            letter.style.setProperty('--letter-active-pressed-background', `url('./resource/collection_area/mouseOver.png')`);
+            letter.style.setProperty('--letter-active-hover-background', `url('./resource/collection_area/mouseOver.png')`);
+
+            letter.addEventListener("click", function() {
+                this.classList.toggle("active"); // 활성화/비활성화 토글
+            });
+        });
+    </script>
+
+    <script type="module">
+        import { todayBundle } from "./js/todayBundle.js";
+        window.thisDialog.setCurrentScript('todayBundle');
+        window.thisDialog.initScript(-1, '핑크빈탈 쓴 강원기');
+        setTimeout(() =>  {
+            todayBundle(window.thisDialog);
+        }, 0);
+        window.buyBtn.addEventListener('click', () => window.thisDialog.readScript('todayBundle'));
+    </script>
+</body>
